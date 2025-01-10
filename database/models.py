@@ -50,8 +50,8 @@ class Comentario(ComentarioBase, table=True):
     __tablename__ = 'comentario'
 
     id: int | None = Field(default=None, primary_key=True)
-    video_id = Field(foreign_key='video.id')
-    usuario_id = Field(foreign_key='user.id')
+    video_id: int = Field(foreign_key='video.id')
+    usuario_id: int = Field(foreign_key='usuario.id')
 
     video: 'Video' = Relationship(back_populates='comentarios')
     usuario: 'Usuario' = Relationship(back_populates='comentarios')
@@ -68,7 +68,7 @@ class Comunidade(ComunidadeBase, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
 
-    usuarios = list['Usuario'] = Relationship(link_model=UsuarioComunidade, back_populates='comunidades')
+    usuarios: list['Usuario'] = Relationship(link_model=UsuarioComunidade, back_populates='comunidades')
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
 # Notificacao
