@@ -54,17 +54,15 @@ def list_files():
 def get_video_with_key(key: str):
 # Key = nome do arquivo + extensão -> teste.mkv
     try:
-
-        full_key = f'uploads/{key}'
         
-        response = s3_client.head_object(Bucket=R2_BUCKET_NAME, Key=full_key)
+        response = s3_client.head_object(Bucket=R2_BUCKET_NAME, Key=key)
         
         return {
              'video': {
-                  'key': full_key,
+                  'key': key,
                   'lastModified': response['LastModified'],
                   'size': response['ContentLength'],
-                  'url': f"{os.getenv('R2_ENDPOINT')}/{R2_BUCKET_NAME}/{full_key}"
+                  'url': f"{os.getenv('R2_ENDPOINT')}/{R2_BUCKET_NAME}/{key}"
              }
         }
     except s3_client.exceptions.NoSuchKey:

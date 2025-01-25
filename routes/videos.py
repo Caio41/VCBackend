@@ -1,3 +1,4 @@
+from sqlmodel import select
 from fastapi import APIRouter, File, Form, UploadFile
 from database.models import Video, VideoPublic
 from service.videos_service import upload_file, list_files, get_video_with_key
@@ -36,6 +37,8 @@ async def upload_video(
     return video
 
 
-@router.get("/{video_key}")
-def get_video(key: str):
-    return get_video_with_key(key)
+@router.get("/{video_id}")
+def get_video(video_id: int, db: SessionDep):
+    statement = select(Video).filter(Video.id == video_id)
+    video = db.exec(statement).first()
+    return get_video_with_key(video.url)
