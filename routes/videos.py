@@ -1,7 +1,7 @@
 from sqlmodel import select
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from database.models import Video, VideoPublic, VideoUpdate
-from service.videos_service import upload_file, list_files, get_video_with_key
+from service.videos_service import delete_video_from_cloud, upload_file, list_files, get_video_with_key
 from database.utils import SessionDep
 
 router = APIRouter()
@@ -41,6 +41,10 @@ async def upload_video(
 def get_video(video_id: int, db: SessionDep):
     statement = select(Video).filter(Video.id == video_id)
     video = db.exec(statement).first()
+
+    if not video:
+        raise HTTPException(status_code=404, detail="Video não encontrado")
+
     return get_video_with_key(video.url)
 
 
@@ -51,7 +55,7 @@ def edit_video(update_info: VideoUpdate, video_id: int, db: SessionDep) -> Video
     video = db.exec(statement).first()
 
     if not video:
-        raise HTTPException(status_code=404, detail="Video not found")
+        raise HTTPException(status_code=404, detail="Video não encontrado")
     
     video.titulo = update_info.titulo
     video.descricao = update_info.descricao
@@ -61,4 +65,18 @@ def edit_video(update_info: VideoUpdate, video_id: int, db: SessionDep) -> Video
 
     return video
 
+
+@router.delete('/{video_id}')
+def delete_video(video_id: int, db: SessionDep):
+    statement = select(Video).filter(Video.id == video_id)
+    video = db.exec(statement).first()
+
+    if not video:
+        raise HTTPException(status_code=404, detail="Video não encontrado")
+
+    delete_video_from_cloud(video.url)
+    db.delete(video)
+    db.commit()
+
+    return f'Video com ID: {video_id} deletado com sucesso!'
 

@@ -53,8 +53,7 @@ def list_files():
 
 def get_video_with_key(key: str):
 # Key = nome do arquivo + extensão -> teste.mkv
-    try:
-        
+    try:  
         response = s3_client.head_object(Bucket=R2_BUCKET_NAME, Key=key)
         
         return {
@@ -68,4 +67,13 @@ def get_video_with_key(key: str):
     except s3_client.exceptions.NoSuchKey:
         raise HTTPException(status_code=404, detail="Vídeo não encontrado")
 
-     
+
+def delete_video_from_cloud(key: str):
+    try:
+        s3_client.delete_object(Bucket=R2_BUCKET_NAME, Key=key)
+
+    except s3_client.exceptions.NoSuchKey:
+        raise HTTPException(status_code=404, detail="Vídeo não encontrado")
+
+
+
