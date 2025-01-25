@@ -1,6 +1,6 @@
 from sqlmodel import select
-from fastapi import APIRouter, File, Form, UploadFile
-from database.models import Video, VideoPublic
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from database.models import Video, VideoPublic, VideoUpdate
 from service.videos_service import upload_file, list_files, get_video_with_key
 from database.utils import SessionDep
 
@@ -42,3 +42,23 @@ def get_video(video_id: int, db: SessionDep):
     statement = select(Video).filter(Video.id == video_id)
     video = db.exec(statement).first()
     return get_video_with_key(video.url)
+
+
+
+@router.put('/{video_id}')
+def edit_video(update_info: VideoUpdate, video_id: int, db: SessionDep) -> VideoPublic:
+    statement = select(Video).filter(Video.id == video_id)
+    video = db.exec(statement).first()
+
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    video.titulo = update_info.titulo
+    video.descricao = update_info.descricao
+
+    db.add(video)
+    db.commit()
+
+    return video
+
+
