@@ -30,7 +30,7 @@ def add_comment(comment_data: ComentarioCreate, db: SessionDep) -> ComentarioPub
 
 
 # adicionar ediçao de comentario dps
-
+# TO-DO: rota pra dar like ??
 
 @router.delete('/')
 def delete_comment(comment_id: int, db: SessionDep):
