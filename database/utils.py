@@ -10,8 +10,8 @@ load_dotenv()
 
 DATABASE_URL = getenv('DATABASE_URL')
 
-engine = create_engine(DATABASE_URL,echo=True)
-
+engine = create_engine(DATABASE_URL)
+# se quiser ver os logs do banco so colocar isso como parametro no crate_engine -> echo=True
 
 def init_db():
     SQLModel.metadata.create_all(engine)

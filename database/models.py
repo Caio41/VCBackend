@@ -67,7 +67,6 @@ class Usuario(UsuarioBase, table=True):
 # Comentario
 class ComentarioBase(SQLModel):
     conteudo: str
-    likes: int
 
 
 class Comentario(ComentarioBase, table=True):
@@ -76,9 +75,24 @@ class Comentario(ComentarioBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     video_id: int = Field(foreign_key="video.id")
     usuario_id: int = Field(foreign_key="usuario.id")
+    likes: int = Field(default=0)
 
     video: "Video" = Relationship(back_populates="comentarios")
     usuario: "Usuario" = Relationship(back_populates="comentarios")
+
+
+class ComentarioCreate(ComentarioBase):
+    video_id: int
+    usuario_id: int
+
+
+
+class ComentarioPublic(ComentarioBase):
+    id: int
+    likes: int
+    video_id: int
+    usuario_id: int
+
 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
