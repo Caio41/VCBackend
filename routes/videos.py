@@ -10,6 +10,7 @@ router = APIRouter()
 @router.get("/")
 def get_all_videos():
     response = list_files()
+    # TO-DO: adicionar dados do banco tb na resposta
     return response
 
 
@@ -45,6 +46,7 @@ def get_video(video_id: int, db: SessionDep):
     if not video:
         raise HTTPException(status_code=404, detail="Video não encontrado")
 
+    # TO-DO: adicionar dados do banco tb na resposta
     return get_video_with_key(video.url)
 
 
