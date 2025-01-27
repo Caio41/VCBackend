@@ -30,7 +30,7 @@ def get_playlist(playlist_id: int, db: SessionDep) -> PlaylistPublic:
 
 
 @router.post('/')
-def add_playlist(playlist_data: PlaylistCreate, db: SessionDep) -> PlaylistPublic:
+def create_playlist(playlist_data: PlaylistCreate, db: SessionDep) -> PlaylistPublic:
     playlist = Playlist.model_validate(playlist_data)
     
     db.add(playlist)
