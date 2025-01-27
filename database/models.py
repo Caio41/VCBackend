@@ -41,6 +41,7 @@ class Usuario(UsuarioBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
     videos: list["Video"] = Relationship(back_populates="usuario")
+    playlists: list['Playlist'] = Relationship(back_populates='usuario')
     comentarios: list["Comentario"] = Relationship(back_populates="usuario")
 
     comunidades: list["Comunidade"] = Relationship(
@@ -195,10 +196,27 @@ class Playlist(PlaylistBase, table=True):
     __tablename__ = "playlist"
 
     id: int | None = Field(default=None, primary_key=True)
+    usuario_id: int = Field(foreign_key='usuario.id')
+
+    usuario: Usuario = Relationship(back_populates='playlists')
 
     videos: list["Video"] = Relationship(
         link_model=PlaylistVideos, back_populates="playlists"
     )
+
+
+class PlaylistPublic(PlaylistBase):
+    id: int
+    videos: list['Video']
+    usuario_id: int
+
+
+class PlaylistCreate(PlaylistBase):
+    usuario_id: int
+
+
+class PlaylistUpdate(PlaylistBase):
+    pass
 
 
 # Video
