@@ -112,6 +112,22 @@ class Comunidade(ComunidadeBase, table=True):
     )
 
 
+class ComunidadeCreate(ComunidadeBase):
+    pass
+
+
+class ComunidadeUpdate(ComunidadeBase):
+    pass
+
+
+
+class ComunidadePublic(ComunidadeBase):
+    id: int
+    usuarios: list['Usuario']
+
+
+
+
 # -----------------------------------------------------------------------------------------------------------------------------------------------
 # Notificacao
 # vou ajeitar depois isso aqui
@@ -219,13 +235,13 @@ class PlaylistUpdate(PlaylistBase):
     pass
 
 
-# Video
+# Video        OK
 # Usuario
-# Comentario
-# Comunidade
+# Comentario   OK
+# Comunidade   
 # Inscrições
 # Notificações
-# Playlists
+# Playlists   OK
 
 # video É DE UM usuario
 # video tem 0 a N comentarios
