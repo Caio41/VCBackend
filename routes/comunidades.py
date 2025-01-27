@@ -26,7 +26,7 @@ def create_comunidade(comunidade_data: ComunidadeCreate, db: SessionDep) -> Comu
     return comunidade
 
 
-@router.put('/')
+@router.put('/{comunidade_id}')
 def update_comunidade(update_info: ComunidadeUpdate, comunidade_id: int,  db: SessionDep) -> ComunidadePublic:
     comunidade = db.exec(select(Comunidade).filter(Comunidade.id == comunidade_id)).first()
 
@@ -40,7 +40,7 @@ def update_comunidade(update_info: ComunidadeUpdate, comunidade_id: int,  db: Se
     return comunidade
 
 
-@router.delete('/')
+@router.delete('/{comunidade_id}')
 def delete_comunidade(comunidade_id: int, db: SessionDep):
     comunidade = db.exec(select(Comunidade).filter(Comunidade.id == comunidade_id)).first()
 

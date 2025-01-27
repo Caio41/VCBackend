@@ -238,7 +238,7 @@ class PlaylistUpdate(PlaylistBase):
 # Video        OK
 # Usuario
 # Comentario   OK
-# Comunidade   
+# Comunidade   OK
 # Inscrições
 # Notificações
 # Playlists   OK
