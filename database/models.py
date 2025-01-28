@@ -30,15 +30,16 @@ class UsuarioComunidade(SQLModel, table=True):
 
 class UsuarioBase(SQLModel):
     nome: str
-    foto: str
+   # foto: str  #add dps
     email: str
-    senha: str
+
 
 
 class Usuario(UsuarioBase, table=True):
     __tablename__ = "usuario"
 
     id: int | None = Field(default=None, primary_key=True)
+    senha_hash: str | None = None
 
     videos: list["Video"] = Relationship(back_populates="usuario")
     playlists: list['Playlist'] = Relationship(back_populates='usuario')
@@ -62,6 +63,21 @@ class Usuario(UsuarioBase, table=True):
             secondaryjoin="Usuario.id==Inscricao.canal",
         ),
     )
+
+
+
+class UsuarioCreate(UsuarioBase):
+    senha: str
+
+
+class UsuarioPublic(UsuarioBase):
+    id: int
+
+
+class Token(SQLModel):
+    access_token: str
+    token_type: str
+
 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
