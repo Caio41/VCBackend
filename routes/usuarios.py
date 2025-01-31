@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
-from database.models import Inscricao, Usuario, UsuarioCreate, UsuarioPublic
+from database.models import Inscricao, Playlist, PlaylistPublic, Usuario, UsuarioCreate, UsuarioPublic
 from deps import SessionDep, CurrentUsuario
 from service.usuarios_service import create_usuario_with_hashing
 
@@ -37,6 +37,16 @@ def get_all_inscricoes(
     ).all()
     return inscricoes
 
+
+@router.get('/playlists')
+def get_all_playlists_from_user(db: SessionDep, current_usuario: CurrentUsuario) -> list[PlaylistPublic]:
+    usuario = db.exec(select(Usuario).filter(Usuario.id == current_usuario.id)).first()
+
+    if not usuario:
+        raise HTTPException(status_code=404, detail='Usuário não encontrado')
+    
+    statement = select(Playlist).filter(Playlist.usuario_id == usuario.id)
+    return db.exec(statement).all()
 
 
 @router.post("/inscrever/{canal_id}")

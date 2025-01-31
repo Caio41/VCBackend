@@ -6,15 +6,7 @@ from deps import SessionDep
 router = APIRouter()
 
 # talvez seja melhor colocar essa nas rotas de usuario ?
-@router.get('/usuarios/{usuario_id}')
-def get_all_playlists_from_user(usuario_id: int, db: SessionDep) -> list[PlaylistPublic]:
-    usuario = db.exec(select(Usuario).filter(Usuario.id == usuario_id)).first()
 
-    if not usuario:
-        raise HTTPException(status_code=404, detail='Usuário não encontrado')
-    
-    statement = select(Playlist).filter(Playlist.usuario_id == usuario.id)
-    return db.exec(statement).all()
 
 
 
