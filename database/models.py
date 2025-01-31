@@ -30,9 +30,8 @@ class UsuarioComunidade(SQLModel, table=True):
 
 class UsuarioBase(SQLModel):
     nome: str
-   # foto: str  #add dps
+    # foto: str  #add dps
     email: str
-
 
 
 class Usuario(UsuarioBase, table=True):
@@ -42,7 +41,9 @@ class Usuario(UsuarioBase, table=True):
     senha_hash: str | None = None
 
     videos: list["Video"] = Relationship(back_populates="usuario")
-    playlists: list['Playlist'] = Relationship(back_populates='usuario')
+    playlists: list["Playlist"] = Relationship(
+        back_populates="usuario", sa_relationship_kwargs={"cascade": "all, delete"}
+    )
     comentarios: list["Comentario"] = Relationship(back_populates="usuario")
 
     comunidades: list["Comunidade"] = Relationship(
@@ -57,13 +58,13 @@ class Usuario(UsuarioBase, table=True):
         ),
     )
     inscricoes: list["Usuario"] = Relationship(
-        link_model=Inscricao, back_populates="inscritos",
+        link_model=Inscricao,
+        back_populates="inscritos",
         sa_relationship_kwargs=dict(
             primaryjoin="Usuario.id==Inscricao.inscrito",
             secondaryjoin="Usuario.id==Inscricao.canal",
         ),
     )
-
 
 
 class UsuarioCreate(UsuarioBase):
@@ -77,7 +78,6 @@ class UsuarioPublic(UsuarioBase):
 class Token(SQLModel):
     access_token: str
     token_type: str
-
 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,13 +103,11 @@ class ComentarioCreate(ComentarioBase):
     usuario_id: int
 
 
-
 class ComentarioPublic(ComentarioBase):
     id: int
     likes: int
     video_id: int
     usuario_id: int
-
 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -136,12 +134,9 @@ class ComunidadeUpdate(ComunidadeBase):
     pass
 
 
-
 class ComunidadePublic(ComunidadeBase):
     id: int
-    usuarios: list['Usuario']
-
-
+    usuarios: list["Usuario"]
 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -182,6 +177,7 @@ class VideoBase(SQLModel):
 #    thumb: str
 #    duracao: int
 
+# PENSAR SOBRE LIKE SER UM MODEL 
 
 class Video(VideoBase, table=True):
     __tablename__ = "video"
@@ -216,6 +212,7 @@ class VideoPublic(VideoBase):
 class VideoUpdate(VideoBase):
     pass
 
+
 # -----------------------------------------------------------------------------------------------------------------------------------------------
 # Playlist
 
@@ -228,9 +225,9 @@ class Playlist(PlaylistBase, table=True):
     __tablename__ = "playlist"
 
     id: int | None = Field(default=None, primary_key=True)
-    usuario_id: int = Field(foreign_key='usuario.id', ondelete='CASCADE')
+    usuario_id: int = Field(foreign_key="usuario.id", ondelete="CASCADE")
 
-    usuario: Usuario = Relationship(back_populates='playlists')
+    usuario: Usuario = Relationship(back_populates="playlists")
 
     videos: list["Video"] = Relationship(
         link_model=PlaylistVideos, back_populates="playlists"
@@ -239,7 +236,7 @@ class Playlist(PlaylistBase, table=True):
 
 class PlaylistPublic(PlaylistBase):
     id: int
-    videos: list['Video']
+    videos: list["Video"]
     usuario_id: int
 
 
