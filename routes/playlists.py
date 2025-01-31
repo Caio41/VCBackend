@@ -1,13 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
-from database.models import Playlist, PlaylistCreate, PlaylistPublic, PlaylistUpdate, Usuario, Video
+from database.models import Playlist, PlaylistCreate, PlaylistPublic, PlaylistUpdate, Video
 from deps import SessionDep
 
 router = APIRouter()
-
-# talvez seja melhor colocar essa nas rotas de usuario ?
-
-
 
 
 @router.get('/{playlist_id}')
