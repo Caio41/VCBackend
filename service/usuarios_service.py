@@ -51,3 +51,8 @@ def create_access_token(email: str, usuario_id: int):
     }
 
     return jwt.encode(encode, AUTH_SECRET_KEY, AUTH_ALGORITHM)
+
+
+def get_usuario_by_email(db: Session, email: str) -> Usuario:
+    return db.exec(select(Usuario).filter(Usuario.email == email)).first()
+    

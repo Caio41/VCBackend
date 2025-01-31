@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 from database.models import Comentario, ComentarioCreate, ComentarioPublic, Video
-from database.utils import SessionDep
+from deps import SessionDep
 
 
 router = APIRouter()
 
-
+# talvez seja bom mudar essa rota p area de videos
 @router.get('/{video_id}')
 def get_all_comments_from_video(video_id: int, db: SessionDep) -> list[ComentarioPublic]:
     video = db.exec(select(Video).filter(Video.id == video_id)).first()

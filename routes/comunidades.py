@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 from database.models import Comunidade, ComunidadeCreate, ComunidadePublic, ComunidadeUpdate
-from database.utils import SessionDep
+from deps import SessionDep
 
 router = APIRouter()
 

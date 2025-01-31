@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from database.utils import SessionDep
+from deps import SessionDep
 from service.usuarios_service import authenticate_user, create_access_token
 
 router = APIRouter()

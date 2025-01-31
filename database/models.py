@@ -228,7 +228,7 @@ class Playlist(PlaylistBase, table=True):
     __tablename__ = "playlist"
 
     id: int | None = Field(default=None, primary_key=True)
-    usuario_id: int = Field(foreign_key='usuario.id')
+    usuario_id: int = Field(foreign_key='usuario.id', ondelete='CASCADE')
 
     usuario: Usuario = Relationship(back_populates='playlists')
 

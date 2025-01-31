@@ -2,7 +2,7 @@ from sqlmodel import select
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from database.models import Video, VideoPublic, VideoUpdate
 from service.videos_service import delete_video_from_cloud, upload_file, list_files, get_video_with_key
-from database.utils import SessionDep
+from deps import SessionDep
 
 router = APIRouter()
 
