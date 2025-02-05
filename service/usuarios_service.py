@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 from os import getenv
 from dotenv import load_dotenv
 from sqlmodel import Session, select
-from database.models import Usuario, UsuarioCreate, UsuarioPublic
+from database.models import Inscricao, Usuario, UsuarioCreate, UsuarioPublic
 from passlib.context import CryptContext
 import jwt
 
@@ -56,3 +56,11 @@ def create_access_token(email: str, usuario_id: int):
 def get_usuario_by_email(db: Session, email: str) -> Usuario:
     return db.exec(select(Usuario).filter(Usuario.email == email)).first()
     
+
+def obter_inscritos(canal_id: int, db: Session) -> list[Usuario]:
+    inscritos = db.exec(
+        select(Usuario)
+        .join(Inscricao, Inscricao.inscrito == Usuario.id)
+        .filter(Inscricao.canal == canal_id)
+    ).all()
+    return inscritos

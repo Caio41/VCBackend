@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 
-from routes import videos, comentarios, playlists, comunidades, usuarios, auth
+from routes import videos, comentarios, playlists, comunidades, usuarios, auth, notificacoes
 from database.utils import init_db
 
 
@@ -13,6 +13,7 @@ app.include_router(playlists.router, prefix='/playlists', tags=['playlists'])
 app.include_router(comunidades.router, prefix='/comunidades', tags=['comunidades'])
 app.include_router(usuarios.router, prefix='/usuarios', tags=['usuarios'])
 app.include_router(auth.router, prefix='/auth', tags=['auth'])
+app.include_router(notificacoes.router, prefix='/notificacoes', tags=['notificacoes'])
 
 
 @app.on_event('startup')

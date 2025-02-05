@@ -1,7 +1,8 @@
 from sqlmodel import select
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, BackgroundTasks, File, Form, HTTPException, UploadFile
 from database.models import Video, VideoPublic, VideoUpdate
 from service.videos_service import delete_video_from_cloud, upload_file, list_files, get_video_with_key
+from service.notificacao_service import notificar_inscritos
 from deps import SessionDep
 
 router = APIRouter()
@@ -16,6 +17,7 @@ def get_all_videos():
 
 @router.post("/")
 async def upload_video(
+    background_tasks: BackgroundTasks,
     db: SessionDep,
     titulo: str = Form(...),
     descricao: str = Form(...),
@@ -35,6 +37,8 @@ async def upload_video(
     db.add(video)
     db.commit()
 
+    background_tasks.add_task(notificar_inscritos, usuario_id, db)
+    
     return video
 
 

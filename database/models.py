@@ -45,6 +45,7 @@ class Usuario(UsuarioBase, table=True):
         back_populates="usuario", sa_relationship_kwargs={"cascade": "all, delete"}
     )
     comentarios: list["Comentario"] = Relationship(back_populates="usuario")
+    notificacoes: list['Notificacao'] = Relationship(back_populates='usuario')
 
     comunidades: list["Comunidade"] = Relationship(
         link_model=UsuarioComunidade, back_populates="usuarios"
@@ -141,17 +142,27 @@ class ComunidadePublic(ComunidadeBase):
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
 # Notificacao
-# vou ajeitar depois isso aqui
-class NotificacoesBase(SQLModel):
-    lida: bool
-    data: date
+# Notificacao quando faz upload de video (canal inscrito)
+# Notificacao quando dao like no video
+# Notificacao quando comentam o video
+class NotificacaoBase(SQLModel):
+    lida: bool = Field(default=False)
+    data: date = Field(default=datetime.now())
+    mensagem: str
 
 
-class Notificacao(NotificacoesBase, table=True):
+class Notificacao(NotificacaoBase, table=True):
     __tablename__ = "notificacao"
 
     id: int | None = Field(default=None, primary_key=True)
 
+    usuario_id: int = Field(foreign_key='usuario.id', ondelete='CASCADE')
+
+    usuario: "Usuario" = Relationship(back_populates="notificacoes")
+
+
+class NotificacaoPublic(NotificacaoBase):
+    usuario: 'Usuario'
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
 # Videos

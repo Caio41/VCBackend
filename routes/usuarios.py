@@ -3,7 +3,7 @@ from sqlmodel import select
 
 from database.models import Inscricao, Playlist, PlaylistPublic, Usuario, UsuarioCreate, UsuarioPublic
 from deps import SessionDep, CurrentUsuario
-from service.usuarios_service import create_usuario_with_hashing
+from service.usuarios_service import create_usuario_with_hashing, obter_inscritos
 
 router = APIRouter()
 
@@ -18,12 +18,7 @@ def get_all_usuarios(db: SessionDep) -> list[UsuarioPublic]:
 def get_all_inscritos(
     db: SessionDep, current_usuario: CurrentUsuario
 ) -> list[UsuarioPublic]:
-    inscritos = db.exec(
-        select(Usuario)
-        .join(Inscricao, Inscricao.inscrito == Usuario.id)
-        .filter(Inscricao.canal == current_usuario.id)
-    ).all()
-    return inscritos
+    return obter_inscritos(current_usuario.id, db)
 
 
 @router.get("/inscricoes")
