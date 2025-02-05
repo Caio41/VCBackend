@@ -162,7 +162,7 @@ class Notificacao(NotificacaoBase, table=True):
 
 
 class NotificacaoPublic(NotificacaoBase):
-    usuario: 'Usuario'
+    usuario_id: int
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------
 # Videos

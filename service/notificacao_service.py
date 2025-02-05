@@ -1,12 +1,18 @@
 from sqlmodel import Session, select
-from database.models import Notificacao, Usuario
-from deps import SessionDep
+from database.models import Notificacao, Usuario, Video
 from service.usuarios_service import obter_inscritos
 from service.constants import BATCH_SIZE
 
 
-def notificar_usuario(receiver_id: int, from_id: int, tipo: str, db: Session):
-    return 0
+def notificar_comentario(video_id: int, usuario_id: int, db: Session):
+    video = db.exec(select(Video).filter(Video.id == video_id)).first()
+    usuario = db.exec(select(Usuario).filter(Usuario.id == usuario_id)).first()
+
+    msg = f'{usuario.nome} comentou no seu video: {video.titulo}'
+    notificacao = Notificacao(usuario_id=video.usuario_id, mensagem=msg)
+    db.add(notificacao)
+    db.commit()
+
 
 
 def notificar_inscritos(canal_id: int, db: Session):
